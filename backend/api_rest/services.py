@@ -1,7 +1,19 @@
 import re
 import json
+import pytesseract
+from pathlib import Path
 
+# Imports das bibliotecas de processamento
+from pdf2image import convert_from_path
+import pytesseract
+import cv2
+import numpy as np
+from PIL import Image
 
+# IMPORTANTE: Import para ler as configurações do Django
+from django.conf import settings
+
+# --- LÓGICA DE PARSING (do antigo data_parser.py) ---
 def normalize_text(texto: str) -> str:
     """
     Normalizes the text by removing extra spaces and empty lines.
@@ -97,7 +109,6 @@ def parse_data_fiscal(text: str) -> str:
             text_section_prestador = relevant_text[:500] # Plan B: Take 500 characters
 
         normalized_text = normalize_text(text_section_prestador)
-        print(normalized_text)
 
         cnpj = find_cnpj(normalized_text)
         razao_social = find_social_reason(normalized_text)
@@ -107,9 +118,75 @@ def parse_data_fiscal(text: str) -> str:
         cnpj = None
         razao_social = None
 
-    dados = {
+    return {
         "cnpj_prestador": cnpj if cnpj else "Não encontrado",
         "nome_prestador": razao_social if razao_social else "Não encontrado"
     }
     
-    return json.dumps(dados, indent=4, ensure_ascii=False)
+
+
+# --- LÓGICA DE EXTRAÇÃO PRINCIPAL ---
+# Import the configurations from our config.py file
+
+# Set the Tesseract path once when the module is imported
+pytesseract.pytesseract.tesseract_cmd = settings.TESSERACT_CMD
+
+def extract_text_from_image(image: Image) -> str:
+    """
+    Extract text from an image object using Tesseract OCR.
+    """
+    # Add the language to improve accuracy
+    text = pytesseract.image_to_string(image, lang='por')
+    return text
+
+def convert_pdf_to_images(pdf_path: Path) -> list:
+    """
+    Convert the pages of a PDF file into a list of image objects.
+    """
+    print(f"Converting PDF file: {pdf_path.name}...")
+    return convert_from_path(pdf_path, poppler_path=settings.POPPLER_PATH)
+
+def choose_file():
+    """
+    Function able to user choose the file to be processed, PDF or image.
+    """
+    available_files = [
+        f for f in settings.SAMPLES_DIR.iterdir() 
+        if f.is_file()
+    ]
+
+    for i, file in enumerate(available_files, start=1):
+        print(f"[{i}] {file.name}")
+        i += 1
+
+    choice = int(input("Enter the number of the file to process: ")) - 1
+
+    if 0 <= choice < len(available_files):
+        return available_files[choice]
+    else:
+        print("Invalid choice. Please try again.")
+        return None
+
+def run_extraction_flow(file_path: Path):
+    """
+    Function that runs the entire extraction process.
+    """
+    extension = file_path.suffix.lower()
+
+    if extension == '.pdf':
+        image_pages = convert_pdf_to_images(file_path)
+    elif extension in ['.png', '.jpg', '.jpeg']:
+        image_pages = [Image.open(file_path)]
+    else:
+        raise ValueError(f"Formato de arquivo não suportado: {extension}")
+
+    # Extract text from each image
+    text_complete = []
+    for i, page in enumerate(image_pages):
+        text_of_page = extract_text_from_image(page)
+        text_complete.append(text_of_page)
+
+    text_final = "\n".join(text_complete)
+    json_result = parse_data_fiscal(text_final)
+
+    return json_result
