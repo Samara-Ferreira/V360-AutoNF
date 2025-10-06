@@ -4,7 +4,7 @@ import { apiClient } from '../services/api';
 import type { DataEntry } from '../types/DataEntry';
 
 function ResultPage() {
-  const { id } = useParams<{ id: string }>(); // Pega o ID da URL
+  const { id } = useParams<{ id: string }>(); 
   const [entry, setEntry] = useState<DataEntry | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -12,8 +12,6 @@ function ResultPage() {
     if (!id) return;
     const fetchResult = async () => {
       try {
-        // Idealmente, a API teria um endpoint /data-entries/${id}/
-        // Por agora, vamos buscar todos e filtrar
         const response = await apiClient.get<DataEntry[]>('/data-entries/');
         const foundEntry = response.data.find(e => e.id === parseInt(id));
         setEntry(foundEntry || null);
@@ -31,16 +29,39 @@ function ResultPage() {
   if (!entry) return <p>Resultado não encontrado.</p>;
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold mb-6 text-cyan-400">Resultado da Extração</h1>
-      <div className="bg-slate-800 p-6 rounded-lg">
-        <p className="mb-2"><strong className="text-slate-400">Arquivo:</strong> {entry.filename}</p>
-        <p className="mb-2"><strong className="text-slate-400">CNPJ do Prestador:</strong> {entry.cnpj_prestador || 'Não encontrado'}</p>
-        <p><strong className="text-slate-400">Nome do Prestador:</strong> {entry.nome_prestador || 'Não encontrado'}</p>
-      </div>
-      <Link to="/" className="mt-6 inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded">
-        &larr; Voltar para a Lista
-      </Link>
+    <div className="py-8">
+      <header className="text-center mb-8">
+        <h1 className="text-title-logo text-3xl">Resultado da Extração</h1>
+        <p className="text-accent-highlight text-slate-500 mt-2 max-w-2xl mx-auto">Detalhes extraídos do documento</p>
+      </header>
+
+      <main className="max-w-3xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="bg-slate-800">
+            <div className="px-6 pb-6 mt-4 bg-slate-800">
+              <div className="divide-y divide-[#777777] rounded-md overflow-hidden">
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-body-description text-slate-400">Arquivo</span>
+                  <span className="text-body-description text-slate-200">{entry.filename}</span>
+                </div>
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-body-description text-slate-400">CNPJ do Prestador</span>
+                  <span className="text-body-description text-slate-200">{entry.cnpj_prestador || 'Não encontrado'}</span>
+                </div>
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-body-description text-slate-400">Nome do Prestador</span>
+                  <span className="text-body-description text-slate-200">{entry.nome_prestador || 'Não encontrado'}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-4 bg-white">
+            <Link to="/" className="btn-primary btn-primary--light inline-block">
+              &larr; Voltar para a Lista
+            </Link>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

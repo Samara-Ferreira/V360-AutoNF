@@ -1,4 +1,109 @@
 /* frontend/src/index.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.text-title-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 3.75rem; /* 60px */
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: #783dbc; /* Tom de roxo 'headings' */
+}
+
+.text-accent-highlight {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 700;   /* bold */
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ff5c13; /* A sua cor laranja */
+}
+
+.text-subtext-highlight {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem; /* 16px */
+  font-weight: 500;   /* bold */
+  letter-spacing: 0.1em;
+  color: #ff5c13; /* A sua cor laranja */
+}
+
+.text-subtitle-display {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #777777; /* Tom de cinza 'slate-500' */
+}
+
+.text-body-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem; /* 16px */
+  line-height: 1.75;  /* Equivalente a leading-relaxed */
+  max-width: 42rem;   /* Equivalente a max-w-2xl */
+  color: #202730;    /* Tom de cinza escuro 'slate-700' */
+}
+
+.text-table-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600; /* semi-bold */
+  color: #202730; /* Tom de cinza quase preto 'slate-900' */
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+  color: #777777;
+}
+
+.btn-primary {
+  /* Cores */
+  background-color: #783dbc; /* Nossa cor 'primary' roxa */
+  color: white;
+
+  /* Estilos de Fonte e Espaçamento */
+  font-weight: 700; /* bold */
+  font-size: 1rem; /* text-base */
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  
+  /* Animação */
+  transition-property: background-color;
+  transition-duration: 200ms;
+}
+
+.btn-primary:hover {
+  background-color: #391b54; /* Nossa cor 'primary-hover' */
+}
+
+.btn-primary:disabled {
+  background-color: #837591; /* Cor cinza 'slate-500' */
+  cursor: not-allowed;
+}
+
+.btn-primary--light {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; /* normal */
+  text-decoration: none;
+}
+
+.btn-secondary {
+  /* Cores */
+  background-color: #783dbc; /* Nossa cor 'primary' roxa */
+  color: white;
+
+  /* Estilos de Fonte e Espaçamento */
+  font-weight: 500; /* bold */
+  font-size: 1rem; /* text-base */
+  padding: 0.5rem 2rem; /* py-3 px-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+}
+
+.btn-secondary:hover {
+  background-color: #391b54; /* Nossa cor 'primary-hover' */
+  transform: translateY(-1px);
+}
