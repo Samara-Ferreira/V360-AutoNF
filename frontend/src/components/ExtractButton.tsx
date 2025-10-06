@@ -11,11 +11,11 @@ export function ExtractButton({ isExtracting, onClick, globalLock = false }: Ext
     <button
       onClick={onClick}
       disabled={isExtracting || globalLock}
-      className="btn-secondary flex items-center justify-center"
+      className="btn-secondary flex items-center justify-center min-w-[100px]"
     >
       {isExtracting ? (
         <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          <Loader2 className="mr-2 h-2 w-2 animate-spin" />
           Extraindo...
         </>
       ) : (

@@ -38,7 +38,7 @@ export function FileUploadForm({ onUploadingChange, externalExtracting = false }
   <div className="bg-white p-6 py-1 px-1 rounded-lg border border-[#404040] border-b-0 border-l-0 border-r-0 shadow-sm h-full">
       
       <h2 className="text-table-title mb-4">
-        Faça upload de um arquivo
+        Faça upload de uma nota fiscal
       </h2>
 
       <form onSubmit={handleUpload} className="space-y-8">

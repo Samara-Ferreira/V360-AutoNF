@@ -41,23 +41,23 @@ function ResultPage() {
             <div className="px-6 pb-6 mt-4 bg-slate-800">
               <div className="divide-y divide-[#777777] rounded-md overflow-hidden">
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-body-description text-slate-400">Arquivo</span>
-                  <span className="text-body-description text-slate-200">{entry.filename}</span>
+                  <span className="text-body-description-large text-slate-400">Arquivo</span>
+                  <span className="text-body-description-large text-slate-200">{entry.filename}</span>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-body-description text-slate-400">CNPJ do Prestador</span>
-                  <span className="text-body-description text-slate-200">{entry.cnpj_prestador || 'Não encontrado'}</span>
+                  <span className="text-body-description-large text-slate-400">CNPJ do Prestador</span>
+                  <span className="text-body-description-large text-slate-200">{entry.cnpj_prestador || 'Não encontrado'}</span>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-body-description text-slate-400">Nome do Prestador</span>
-                  <span className="text-body-description text-slate-200">{entry.nome_prestador || 'Não encontrado'}</span>
+                  <span className="text-body-description-large text-slate-400">Nome do Prestador</span>
+                  <span className="text-body-description-large text-slate-200">{entry.nome_prestador || 'Não encontrado'}</span>
                 </div>
               </div>
             </div>
           </div>
           <div className="p-4 bg-white">
             <Link to="/" className="btn-primary btn-primary--light inline-block">
-              &larr; Voltar para a Lista
+              &larr; Voltar para a página de envio
             </Link>
           </div>
         </div>
