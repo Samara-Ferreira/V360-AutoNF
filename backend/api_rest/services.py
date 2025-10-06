@@ -3,17 +3,14 @@ import json
 import pytesseract
 from pathlib import Path
 
-# Imports das bibliotecas de processamento
 from pdf2image import convert_from_path
 import pytesseract
 import cv2
 import numpy as np
 from PIL import Image
 
-# IMPORTANTE: Import para ler as configurações do Django
 from django.conf import settings
 
-# --- LÓGICA DE PARSING (do antigo data_parser.py) ---
 def normalize_text(texto: str) -> str:
     """
     Normalizes the text by removing extra spaces and empty lines.
@@ -57,24 +54,30 @@ def find_social_reason(text: str) -> str | None:
     patterns_to_try = [
         # Search for "Razão Social:" followed by the name on the same line.
         r"Razão Social\s*[:\-]?\s*([^\n]+)",
+        r"Razao Social\s*[:\-]?\s*([^\n]+)",
         
         # Search for "Nome/Razão Social:" followed by the name on the same line.
         r"Nome\s*/\s*Razão Social\s*[:\-]?\s*([^\n]+)",
+        r"Nome\s*/\s*Razao Social\s*[:\-]?\s*([^\n]+)",
 
         # Search for "Nome ou Razão Social:" followed by the name on the same line.
         r"Nome ou Razão Social\s*[:\-]?\s*([^\n]+)",
+        r"Nome ou Razao Social\s*[:\-]?\s*([^\n]+)",
 
         # Search for "Nome:" followed by the name on the same line.
         r"Nome\s*[:\-]?\s*([^\n]+)",
 
         # Search for "Razão Social" and capture the content of the next line.
         r"Razão Social[^\n]*\n\s*([^\n]+)",
+        r"Razao Social[^\n]*\n\s*([^\n]+)",
 
         # Search for "Nome/Razão Social" and capture the content of the next line.
-        r"Nome\s*/\s*Razão Social[^\n]*\n\s*([^\n]+)"
+        r"Nome\s*/\s*Razão Social[^\n]*\n\s*([^\n]+)",
+        r"Nome\s*/\s*Razao Social[^\n]*\n\s*([^\n]+)",
 
         # Search for "Nome ou Razão Social" and capture the content of the next line.
-        r"Nome ou Razão Social[^\n]*\n\s*([^\n]+)"
+        r"Nome ou Razão Social[^\n]*\n\s*([^\n]+)",
+        r"Nome ou Razao Social[^\n]*\n\s*([^\n]+)",
 
         # Search for "Nome" and capture the content of the next line.
         r"Nome[^\n]*\n\s*([^\n]+)",

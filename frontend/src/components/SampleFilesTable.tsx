@@ -73,7 +73,7 @@ export function SampleFilesTable({ externalLock = false, onExtractingChange }: S
   return (
     <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
       <h2 className="text-table-title mb-4">
-        Escolha um arquivo de exemplo
+        Escolha uma nota fiscal de exemplo
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-separate" style={{ borderSpacing: '0 0.35rem' }}>

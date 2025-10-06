@@ -63,8 +63,9 @@ export function FileDropZone({ selectedFile, setSelectedFile, disableSelect = fa
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => { if (!disableSelect) handleDrop(e); }}
       onClick={triggerFileSelect}
-  className={`border border-b-0 border-dashed rounded-lg p-3 text-center transition-colors duration-200
+  className={`border border-b-0 border-dashed rounded-lg p-3 text-center transition-colors duration-200 flex items-center justify-center
         ${disableSelect ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} ${isDragging ? 'border-cyan-400 bg-slate-700/50' : 'border-[#777777] hover:border-[#646464] border-2'}`}
+      style={{ minHeight: '10rem' }}
     >
       <input 
         ref={fileInputRef}
@@ -75,8 +76,11 @@ export function FileDropZone({ selectedFile, setSelectedFile, disableSelect = fa
       />
       <div className="flex flex-col items-center gap-1 text-slate-400">
         <UploadCloud className="h-10 w-10" stroke="#777777" strokeWidth={1.4} />
-        <p className="font-semibold font-inter text-sm">Arraste e solte o arquivo aqui ou clique para selecionar</p>
-        <p className="font-inter text-xs mt-1">(PDF, PNG, JPG ou JPEG)</p>
+        <p className="font-semibold font-inter text-sm text-center leading-tight">
+          Arraste e solte o arquivo aqui ou clique para selecionar
+          <br />
+          <span className="font-normal text-xs">(PDF, PNG, JPG ou JPEG)</span>
+        </p>
       </div>
     </div>
   );

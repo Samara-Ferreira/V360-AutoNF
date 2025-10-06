@@ -13,7 +13,6 @@ export function TableRowSkeleton() {
 
       {/* Célula do Botão de Ação */}
       <td className="p-4 text-right">
-        {/* Placeholder para o Botão */}
         <div className="h-10 w-28 bg-gray-200 rounded-lg animate-pulse ml-auto"></div>
       </td>
     </tr>
