@@ -49,8 +49,16 @@ function ResultPage() {
                   <span className="text-body-description-large text-slate-200">{entry.cnpj_prestador || 'Não encontrado'}</span>
                 </div>
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-body-description-large text-slate-400">Nome do Prestador</span>
+                  <span className="text-body-description-large text-slate-400">Razão Social do Prestador</span>
                   <span className="text-body-description-large text-slate-200">{entry.nome_prestador || 'Não encontrado'}</span>
+                </div>
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-body-description-large text-slate-400">E-mail do Prestador</span>
+                  <span className="text-body-description-large text-slate-200">{entry.email_prestador || 'Não encontrado'}</span>
+                </div>
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-body-description-large text-slate-400">Telefone do Prestador</span>
+                  <span className="text-body-description-large text-slate-200">{entry.telefone_prestador || 'Não encontrado'}</span>
                 </div>
               </div>
             </div>

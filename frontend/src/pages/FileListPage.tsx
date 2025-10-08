@@ -19,10 +19,6 @@ function FileListPage() {
         <p className="text-accent-highlight mt-2">
           Automação de Extração de Dados de Documentos Fiscais
         </p>
-
-        {/* <p className="text-highlight-badge text-slate-500 mt-4 max-w-2xl mx-auto">
-          Faça o upload de uma nota fiscal ou selecione um exemplo abaixo para extrair os dados.
-        </p> */}
       </header>
 
   <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">

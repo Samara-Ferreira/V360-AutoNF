@@ -110,6 +110,13 @@
   transform: translateY(-1px);
 }
 
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none; 
+  filter: grayscale(10%);
+}
+
 .text-highlight-badge {
   display: inline-block; 
   background-color: #f0ebf5; 
