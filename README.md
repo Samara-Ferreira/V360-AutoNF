@@ -14,7 +14,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.2+-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-> Este projeto foi desenvolvido com o objetivo de automatizar o processo manual e repetitivo de extração de dados de notas fiscais. A aplicação consiste em um backend REST API construído com Django e um frontend interativo em React e Typescript.
+> Este projeto foi desenvolvido com o objetivo de automatizar o processo manual e repetitivo de extração de dados de notas fiscais. A aplicação consiste em um backend REST API construído com um backend em Python integrado ao frontend de forma interativo em React e Typescript.
 > > 
 
 ## Download do repositório
@@ -47,8 +47,8 @@ Segue um mapa simplificado da árvore de diretórios com uma breve explicação 
 
 ```
 V360-AutoNF/
-├─ backend/                # API Django (endpoints, modelos, lógica de extração)
-│  ├─ api_rest/            # App Django: views, serializers, models e serviços de extração
+├─ backend/                # API (endpoints, modelos, lógica de extração)
+│  ├─ api_rest/            # App: views, serializers, models e serviços de extração
 │  ├─ manage.py
 │  └─ db.sqlite3           # Banco de dados local (dev)
 ├─ frontend/               # Aplicação React + TypeScript (UI/UX)
@@ -167,7 +167,7 @@ Você precisará de dois terminais abertos para rodar o backend e o frontend sim
 ```bash
 # Navegue para a pasta 'backend' (se não já estiver lá)
 # Ative o ambiente virtual (se não já estiver ativo)
-# Inicie o servidor Django
+# Inicie o projeto
 python manage.py runserver
 ```
 > ✅ Seu backend estará rodando em http://127.0.0.1:8000.
