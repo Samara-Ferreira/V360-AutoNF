@@ -40,60 +40,72 @@ def find_cnpj(text: str) -> str | None:
 def find_name(text: str) -> str | None:
     """
     Encontra a razão social (nome da empresa) no texto fornecido.
+    Captura a linha e depois a limpa em Python para remover texto extra.
     """
-    # Lista de padrões para tentar em ordem de prioridade
-    # [^\n]+ captura um ou mais caracteres na linha, evitando resultados vazios
     patterns_to_try = [
-        # Busca por "Razão Social:" seguido do nome na mesma linha, com ou sem acento
+        # Na mesma linha
         r"Razão Social\s*[:\-]?\s*([^\n]+)",
         r"Razao Social\s*[:\-]?\s*([^\n]+)",
-
-        # Busca por "Nome/Razão Social:" seguido do nome na mesma linha, com ou sem acento
         r"Nome\s*/\s*Razão Social\s*[:\-]?\s*([^\n]+)",
         r"Nome\s*/\s*Razao Social\s*[:\-]?\s*([^\n]+)",
-
-        # Busca por "Nome:" seguido do nome na mesma linha
-        r"Nome\s*[:\-]?\s*([^\n]+)",
-
-        # Busca por "Razão Social" e captura o conteúdo da próxima linha
+        r"\bNome\b\s*[:\-]?\s*([^\n]+)", 
+        
+        # Na linha seguinte
         r"Razão Social[^\n]*\n\s*([^\n]+)",
         r"Razao Social[^\n]*\n\s*([^\n]+)",
-
-        # Busca por "Nome" e captura o conteúdo da próxima linha
-        r"Nome[^\n]*\n\s*([^\n]+)",
-
-        # Busca por "Nome/Razão Social" e captura o conteúdo da próxima linha
+        r"\bNome\b[^\n]*\n\s*([^\n]+)",
         r"Nome\s*/\s*Razão Social[^\n]*\n\s*([^\n]+)",
         r"Nome\s*/\s*Razao Social[^\n]*\n\s*([^\n]+)",
     ]
     
     for pattern in patterns_to_try:
-        # Tenta encontrar uma correspondência com o padrão atual
         match = re.search(pattern, text, re.IGNORECASE)
         
         if match:
-            # Se encontrado, obtém o resultado (sempre no grupo de captura 1)
             social_reason = match.group(1).strip()
 
-            # Se o resultado não estiver vazio, encontramos o que queríamos
+            # Algumas palavras que marcam o fim do nome da empresa
+            stop_words = ["Nome Fantasia", "CNPJ", "Inscrição Municipal", "Endereço"]
+            
+            for word in stop_words:
+                # Procura pela palavra de parada 
+                if word.lower() in social_reason.lower():
+                    # Se encontrar, pega o índice onde ela começa
+                    stop_index = social_reason.lower().find(word.lower())
+                    # "Corta" a string, pegando apenas o que veio antes
+                    social_reason = social_reason[:stop_index].strip()
+            
+            social_reason = social_reason.rstrip(' -:')
+
             if social_reason:
                 return social_reason
+                
     return None
 
 
 def find_email(text: str) -> str | None:
     """
-    Encontra a primeira ocorrência de um email no texto fornecido.
+    Versão robusta para encontrar o email. Primeiro, localiza a palavra-chave 'Email',
+    depois corrige erros comuns de OCR no texto candidato e, por fim, valida o resultado.
     """
-    # Padrão de email que aceita '@' ou 'Q' como separador
-    email_pattern = r"[a-zA-Z0-9._%+-]+[@Q][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+    # Localiza a linha qu e contém a palavra "Email"
+    match_line = re.search(r"Email\s*[:\-]?\s*(.*)", text, re.IGNORECASE)
 
-    match = re.search(email_pattern, text)
+    if not match_line:
+        return None
 
-    if match:
-        email_correto = match.group(0).replace('Q', '@').replace('q', '@')
-        return email_correto
-    return None 
+    candidate_text = match_line.group(1).strip()
+    
+    # Procura por (Q, Q), [Q], {Q}, q, Q, e substitui por @
+    corrected_text = re.sub(r'[\(\[\{]?\s*Q\s*[\)\]\}]?', '@', candidate_text, flags=re.IGNORECASE)
+    
+    valid_email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+    match_final = re.search(valid_email_pattern, corrected_text)
+    
+    if match_final:
+        return match_final.group(0)
+        
+    return None
 
 
 def find_phone(text: str) -> str | None:
@@ -110,7 +122,7 @@ def find_phone(text: str) -> str | None:
     return None
 
 
-def parse_data(text: str) -> str:
+def parse_data(text: str) -> dict:
     """
     Função que analisa o texto extraído para obter dados específicos.
     """

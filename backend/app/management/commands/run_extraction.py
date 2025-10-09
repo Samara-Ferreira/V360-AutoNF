@@ -1,13 +1,8 @@
-"""
-Esse comando foi criado para caso o usuário queira testar a extração de um arquivo diretamente, simulando
-o script de extração bruto.
-"""
-
 from django.core.management.base import BaseCommand
 from django.conf import settings
+import json
 
-from app.services import run_extraction_flow
-from extraction.extraction_flow import run_extraction_flow
+from app.extraction.extraction_flow import run_extraction_flow
 
 
 class Command(BaseCommand):
@@ -35,9 +30,10 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Iniciando extração para o arquivo: {file_path}"))
         
         try:
-            # Chamada da função de extração de dados
-            json_result = run_extraction_flow(file_path)
-            self.stdout.write("\n--- RESULTADO DA EXTRAÇÃO ---\n")
+            result_dict = run_extraction_flow(file_path)
+            
+            json_result = json.dumps(result_dict, indent=4, ensure_ascii=False)
+
             self.stdout.write(json_result)
 
         except Exception as e:
