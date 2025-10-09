@@ -2,7 +2,7 @@
   <br>
     <img width="80x" src="frontend/src/assets/icon-autoNF.png"> 
   <br>
-  Automação de Extração de Dados de Documentos Fiscais
+  Automação de Extração de Dados de Notas Fiscais
   <br>
 </h1>
 
@@ -14,8 +14,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.2+-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-> Este projeto foi desenvolvido com o objetivo de automatizar o processo manual e repetitivo de extração de dados de notas fiscais. A aplicação consiste em um backend REST API construído com um backend em Python integrado ao frontend de forma interativo em React e Typescript.
-> > 
+> Este projeto foi desenvolvido com o objetivo de automatizar o processo manual e repetitivo de extração de dados em notas fiscais. A aplicação consiste em um script para extração de dados com um backend em Python integrado ao frontend de forma interativa em React e Typescript.
 
 ## Download do repositório
 
@@ -23,6 +22,8 @@
 gh repo clone Samara-Ferreira/V360-AutoNF
 ```
 </div>
+
+<div align="justify">
 
 <details open="open">
 <summary>Sumário</summary>
@@ -38,7 +39,7 @@ gh repo clone Samara-Ferreira/V360-AutoNF
 
 ## Sobre o Projeto
 
-O V360-AutoNF é uma aplicação full-stack projetada para automatizar a extração de dados de documentos fiscais (PDFs e imagens). Através de uma interface interativa, o usuário pode fazer o upload de um arquivo ou selecionar um exemplo. O sistema então processa o documento, extrai de forma inteligente o CNPJ e a Razão Social do prestador de serviço e exibe o resultado em uma nova página.
+O V360-AutoNF é uma aplicação full-stack projetada para automatizar a extração de dados de documentos fiscais (PDFs e imagens). Através de uma interface interativa, o usuário pode fazer o upload de um arquivo ou selecionar um exemplo. O sistema então processa o documento, extrai de forma inteligente o CNPJ, a Razão Social, o e-mail e o telefone do prestador de serviços e exibe o resultado em uma nova página.
 
 
 ### Estrutura do projeto
@@ -48,7 +49,8 @@ Segue um mapa simplificado da árvore de diretórios com uma breve explicação 
 ```
 V360-AutoNF/
 ├─ backend/                # API (endpoints, modelos, lógica de extração)
-│  ├─ api_rest/            # App: views, serializers, models e serviços de extração
+│  ├─ app/                 # App: views, serializers, models e serviços de extração
+│  │  ├─ extraction/       # Serviços de extração (OCR, parsing)
 │  ├─ manage.py
 │  └─ db.sqlite3           # Banco de dados local (dev)
 ├─ frontend/               # Aplicação React + TypeScript (UI/UX)
@@ -66,7 +68,7 @@ V360-AutoNF/
 
 ### Tecnologias Utilizadas
 
-Nesta seção descrevemos as principais ferramentas e a lógica empregada para extrair informações (CNPJ e Razão Social) de PDFs e imagens.
+Nesta seção descrevemos as principais ferramentas e a lógica empregada para extrair informações de PDFs e imagens.
 
 #### Fluxo de Extração de Dados
 ```
@@ -78,14 +80,16 @@ Arquivo (PDF/Imagem)  ──>  [1. Conversão e OCR]  ──>  Texto Bruto  ─�
     - Cada imagem é então processada pelo `pytesseract` para extrair todo o conteúdo textual, resultando em uma única string de texto bruto.
 
 2. Análise e Extração (*Parsing* Inteligente)
-    - Isolamento da Seção: O algoritmo analisa o texto bruto em busca de palavras-chave (como "Prestador de Serviços" e "Tomador de Serviços") para "recortar" apenas o bloco de texto que contém os dados do prestador, ignorando o resto do documento. Caso após selecionar os dados ele não encontre o "Tomador de Serviços" para finalizar o recorte, ele pega os 500 próximos caracteres;
+    - Isolamento da Seção: O algoritmo analisa o texto bruto em busca de palavras-chave (como "Prestador de Serviços" e "Tomador de Serviços") para "recortar" apenas o bloco de texto que contém os dados do prestador, ignorando o resto do documento. Caso após selecionar os dados ele não encontre o "Tomador de Serviços" para finalizar o recorte, ele pega os 1000 próximos caracteres;
     - Normalização: O bloco de texto isolado passa por um processo de normalização para remover quebras de linha e espaçamentos excessivos, padronizando o texto para a próxima etapa;
     - Extração com Regex: Expressões Regulares (Regex) são aplicadas ao texto normalizado para encontrar e extrair os dados-alvo:
         - CNPJ: Busca pelo padrão exato XX.XXX.XXX/XXXX-XX;
-        - Razão Social: Testa uma lista de padrões flexíveis para encontrar o nome da empresa, que pode estar ao lado ou abaixo de diferentes rótulos (ex: "Nome/Razão Social", "Razão Social", "Nome:").
+        - Razão Social: Testa uma lista de padrões flexíveis para encontrar o nome da empresa, que pode estar ao lado ou abaixo de diferentes rótulos (ex: "Nome/Razão Social", "Razão Social", "Nome:");
+      - E-mail: Procura por padrões comuns de endereços de e-mail (ex: nome@dominio.com) usando uma regex tolerante a espaços e caracteres estranhos introduzidos pelo OCR; aplica normalização para remover pontuações extras e caracteres não imprimíveis;
+      - Telefone: Identifica sequências numéricas compatíveis com DDD + número (ex: (11) 99999-9999, 11 9999-9999), permitindo variações com ou sem parênteses, hífens e espaços.
 
 3. Geração da Saída
-    - Os dados limpos e extraídos são estruturados em um objeto JSON e retornados pela API, prontos para serem exibidos no frontend ou consumidos por outro sistema.
+    - Os dados limpos e extraídos são estruturados em um objeto JSON e retornados pela API, prontos para serem exibidos no frontend.
 
 Abaixo, tem-se uma tabela resumindo cada ferramenta principal e o motivo de sua escolha.
 
@@ -100,7 +104,7 @@ Com relação as tecnologias do Backend e Frontend, temos:
 | Categoria | Tecnologias |
 | :--- | :--- |
 | **Backend** | `Python`, `Django`, `Django REST Framework` |
-| **Frontend** | `React`, `TypeScript`, `Vite`, `Tailwind CSS`, `Axios`, `React Router DOM` |
+| **Frontend** | `React`, `TypeScript`, `Vite`, `Axios`, `React Router DOM` |
 | **Banco de Dados** | `SQLite 3` (padrão do Django) |
 
 
@@ -191,16 +195,17 @@ A seguir, uma demonstração do fluxo de trabalho da aplicação.
 
 ![Exemplo de Documento de Teste](images/example.png)
 
-> A imagem exibe um exemplo de Nota Fiscal de Serviço (NFS-e). O desafio consiste em extrair, de forma automática e precisa, os dados do **"Prestador de Serviços"** (CNPJ e Razão Social).
+> A imagem exibe um exemplo de Nota Fiscal de Serviço (NFS-e). O desafio consiste em extrair, de forma automática e precisa, os dados do **"Prestador de Serviços"** (CNPJ, Razão Social, E-mail e Telefone).
 
 ### 2. A Solução
 
 ![Interface Principal da Aplicação](images/page1.png)
 
-> Esta tela apresenta a interface principal da aplicação, desenvolvida com **React, TypeScript e Tailwind CSS**. Oferece duas formas de interação: um componente de **drag-and-drop** para upload de novos arquivos e uma lista de **documentos de exemplo** para serem selecionados e extraídos os dados. Pode se conferir as informações desses documentos navegando para o diretório `samples`.
+> Esta tela apresenta a interface principal da aplicação, desenvolvida com **React e TypeScript**. Oferece duas formas de interação: um componente de **drag-and-drop** para upload de novos arquivos e uma lista de **documentos de exemplo** para serem selecionados e extraídos os dados. Pode se conferir as informações desses documentos navegando para o diretório `samples`.
 
 ### 3. O Resultado
 
 ![Página de Resultados da Extração](images/page2.png)
 
-> Após o processamento, o usuário é direcionado para a página de resultados. A imagem demonstra o sucesso da extração: o CNPJ e a Razão Social do prestador foram corretamente identificados e são exibidos de forma limpa e organizada. 
+> Após o processamento, o usuário é direcionado para a página de resultados. A imagem demonstra o sucesso da extração: o CNPJ, a Razão Social, o e-mail e o telefone do prestador foram corretamente identificados e são exibidos de forma limpa e organizada. 
+</div>
