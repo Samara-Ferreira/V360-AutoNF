@@ -1,5 +1,4 @@
 from pathlib import Path
-from PIL import Image
 from pdf2image import convert_from_path
 
 from django.conf import settings

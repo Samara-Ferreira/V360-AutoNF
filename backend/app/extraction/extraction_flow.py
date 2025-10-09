@@ -28,7 +28,6 @@ def run_extraction_flow(file_path: Path):
 
     text_final = "\n".join(text_complete)
 
-    # Analisar o texto extraído para obter os dados específicos
     json_result = parse_data(text_final)
 
     return json_result

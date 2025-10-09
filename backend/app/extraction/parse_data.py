@@ -7,7 +7,7 @@ def normalize_text(texto: str) -> str:
     # Divide o texto em linhas
     lines = texto.splitlines()
     
-    # Lista para armazenar linhas limpas
+    # Lista para armazenar as linhas limpas
     cleaned_lines = []
     for line in lines:
         # Substitui múltiplos espaços por um único espaço e remove espaços no início/fim da linha específica
@@ -41,7 +41,6 @@ def find_name(text: str) -> str | None:
     """
     Encontra a razão social (nome da empresa) no texto fornecido.
     """
-   
     # Lista de padrões para tentar em ordem de prioridade
     # [^\n]+ captura um ou mais caracteres na linha, evitando resultados vazios
     patterns_to_try = [
@@ -56,10 +55,6 @@ def find_name(text: str) -> str | None:
         # Busca por "Nome:" seguido do nome na mesma linha
         r"Nome\s*[:\-]?\s*([^\n]+)",
 
-        # Busca por "Nome ou Razão Social:" seguido do nome na mesma linha, com ou sem acento
-        r"Nome ou Razão Social\s*[:\-]?\s*([^\n]+)",
-        r"Nome ou Razao Social\s*[:\-]?\s*([^\n]+)",
-
         # Busca por "Razão Social" e captura o conteúdo da próxima linha
         r"Razão Social[^\n]*\n\s*([^\n]+)",
         r"Razao Social[^\n]*\n\s*([^\n]+)",
@@ -70,10 +65,6 @@ def find_name(text: str) -> str | None:
         # Busca por "Nome/Razão Social" e captura o conteúdo da próxima linha
         r"Nome\s*/\s*Razão Social[^\n]*\n\s*([^\n]+)",
         r"Nome\s*/\s*Razao Social[^\n]*\n\s*([^\n]+)",
-
-        # Busca por "Nome ou Razão Social" e captura o conteúdo da próxima linha
-        r"Nome ou Razão Social[^\n]*\n\s*([^\n]+)",
-        r"Nome ou Razao Social[^\n]*\n\s*([^\n]+)",
     ]
     
     for pattern in patterns_to_try:
