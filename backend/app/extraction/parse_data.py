@@ -94,7 +94,7 @@ def find_email(text: str) -> str | None:
 
     candidate_text = match_line.group(1).strip()
 
-    corrected_text = re.sub(r'[\(\[\{]?\s*[QD]\s*[\)\]\}]?', '@', candidate_text, flags=re.IGNORECASE)
+    corrected_text = re.sub(r'[\(\[\{\&<]?\s*[QD]\s*[\)\]\}]?', '@', candidate_text, flags=re.IGNORECASE)
 
     valid_email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     match_final = re.search(valid_email_pattern, corrected_text)
