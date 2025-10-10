@@ -85,23 +85,20 @@ def find_name(text: str) -> str | None:
 
 def find_email(text: str) -> str | None:
     """
-    Versão robusta para encontrar o email. Primeiro, localiza a palavra-chave 'Email',
-    depois corrige erros comuns de OCR no texto candidato e, por fim, valida o resultado.
+    Esta função encontra o email no texto fornecido, corrigindo erros comuns de OCR.
     """
-    # Localiza a linha qu e contém a palavra "Email"
     match_line = re.search(r"Email\s*[:\-]?\s*(.*)", text, re.IGNORECASE)
-
+    
     if not match_line:
         return None
 
     candidate_text = match_line.group(1).strip()
-    
-    # Procura por (Q, Q), [Q], {Q}, q, Q, e substitui por @
-    corrected_text = re.sub(r'[\(\[\{]?\s*Q\s*[\)\]\}]?', '@', candidate_text, flags=re.IGNORECASE)
-    
-    valid_email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+
+    corrected_text = re.sub(r'[\(\[\{]?\s*[QD]\s*[\)\]\}]?', '@', candidate_text, flags=re.IGNORECASE)
+
+    valid_email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     match_final = re.search(valid_email_pattern, corrected_text)
-    
+
     if match_final:
         return match_final.group(0)
         
